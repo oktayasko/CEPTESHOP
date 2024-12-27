@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitör</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+        body { /* Genel Sayfa */
+            background-color: #292c30;
+        }
+        a{ /* Genel Yazı Alt Çizgisini Kaldırma */
+            text-decoration: none;
+        }
+        .kampanya-barı { /* Kampanya Barı */
+            background: linear-gradient(90deg, #e14502, #ffd000); /* Arka Plan Değişen Renk */
+            background-size: 200% 200%; /* Arka Plan Boyutu */
+            animation: gradyan-değişimi 6s ease infinite; /* Gradyan Değişimi 6 Saniye */
+            color: white; /* Renk */
+            padding: 10px 0; /* Margin Border Padding Content */
+            text-align: center; /* Metni Ortala */
+            font-size: 1.1rem; /* Font Boyutu */
+            font-weight: bold; /* Font Kalınlığı */
+            position: relative; /* Konuma göre göreceli kaydırma */
+            overflow: hidden; /* Fazlalığı Gizleme */
+        }
+        @keyframes gradyan-değişimi { /* Gradyan Değişimi (Sonradan Öğrendim) */
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .kampanya-barı span { /* Hareket Yeri */
+            display: inline-block; /* Satır içi Engelleme */
+            animation: kaydır 10s linear infinite; /* Kaydırma 10 Saniye */
+            white-space: nowrap; /* Kasıtlı bazı yerleri boş bırakması ve <br> etiketici görünceye kadar boşluk */
+        }
+        @keyframes kaydır {
+            0% { transform: translateX(160%); }
+            100% { transform: translateX(-160%); }
+        }
+        .kapat-butonu { /* Kapatma Butonu */
+            position: absolute; /* Tam istediğimiz yere yerleştirme */
+            right: 10px; /* Sağa 10px */
+            top: 50%; /* Tam Ortaya %50 */
+            transform: translateY(-50%); /* Yatay Olarak Hareket Ettirme */
+            background: rgba(0, 0, 0, 0.3); /* Arka PLan Rengi */
+            border: none; /* Dış Kısım Yok */
+            color: white; /* Renk */
+            padding: 5px 10px; /* İç Boşluk Eklendi / Kaldırıldı */
+            cursor: pointer; /* İmleç */
+        }
+        .baslık { /* Header */
+            display: flex; /* Esneklik Sağlar */
+            justify-content: space-between; /* Satır İçi Boşluk Dağıtma */
+            align-items: center; /* İtemleri Ortalama */ 
+            padding: 40px 20px; /* İç Boşluk Eklendi / Kaldırıldı */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border-bottom: 1px solid #ff0000; /* Alt Kenar Çizgisi */
+            max-height: 70px; /* Maksimum Uzunluk */
+        }
+        .baslık .menü-icon button svg,
+        .baslık .kullanıcı-iconu svg { /* Menü, Hesap, Sepet İconu */
+            fill: white; /* İkonlar Beyaz */
+            cursor: pointer; /* İmleç */
+            transition: fill 0.3s ease; /* Hover Sırasında Saniye */
+        }
+        .baslık .menü-icon button svg:hover,
+        .baslık .kullanıcı-iconu svg:hover {
+            fill: #e14502; /* Hover Sırasında Kırmızı */
+        }
+        .baslık .logo img {
+            height: 100px; /* Logo Genişliği */
+            max-height: 100px; /* Logo Maksimum Genişliği */
+            transition: transform 0.3s ease; /* Hover 0.3 Saniye */
+        }
+        .baslık .logo img:hover {
+            transform: scale(1.2); /* Hover Derecesi 1.2 */
+        }
+        .dropdown-menu { /* Menü */
+            min-width: 250px; /* Minimum genişlik */
+            max-width: 350px; /* Maksimum genişlik */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border: 1px solid #ff0000; /* Dış Rengi */
+            border-radius: 10px; /* Hafif Daha Yuvarlak */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Gölgelendirme */
+            padding: 10px 0; /* İç Boşluk Eklendi / Kaldırıldı */
+        }
+        .dropdown-item { /* Menü İtem */
+            color: white; /* Renk */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Arka Plan Hover İle 0.3 Saniye */
+            padding: 8px 20px; /* İç Boşluk Eklendi / Kaldırıldı */
+            white-space: nowrap; /* Metinlerin tek satırda kalması için */
+        }
+        .dropdown-item:hover { /* Menü İtem Hover */
+            background-color: #e14502; /* Arka Plan Rengi */
+            color: white; /* Renk */
+        }
+        .dropdown-divider { /* Menü Bölücü */
+            border-top: 1px solid #737373;  /* 1px Yukarı Gri Bölme */
+            margin: 5px 0; /* Ayırıcıya Boşluk Eklendi */
+        }
+        .baslık .kullanıcı-iconu svg { /* Kullanıcı İkonu Boyut */
+            width: 30px; /* Genişlik */
+            height: 30px; /* Uzunluk */
+        }
+        .genis-container { /* Geniş Container */
+            background: linear-gradient(135deg, #1f1f2e, #2c2c3a); /* Arka Plan Rengi */
+            border-radius: 15px; /* Köşe Yuvarlama */
+            padding: 3rem; /* İç Boşluk */
+            margin: 2rem auto; /* Ortalamak İçin */
+            width: 90%; /* Genişlik */
+            max-width: 1200px; /* Maksimum Genişlik */
+        }
+        .urun-detay img { /* Ürün Görseli */
+            width: 49%; /* Genişliği */
+            height: auto; /* Görsel Oranını Koru */
+            border-radius: 10px; /* Görsel Köşe Yuvarlama */
+            margin: 0 auto 20px; /* Görseli Ortala Ve Alt Boşluk Ekle */
+            display: block; /* Bloklama */
+            box-shadow: 0 8px 15px rgba(255, 255, 255, 0.4); /* Gölge Efekti */
+        }
+        @media (max-width: 768px) { /* Mobil İçin */
+        .urun-detay img { /* Ürün Detay Resim */
+            width: 100%; /* Resim Genişliği 100% */
+        }
+        }
+        .urun-baslik { /* Ürün Başlığı */
+            font-size: 2rem; /* Başlık Boyutu */
+            font-weight: bold; /* Kalın Metin */
+            color: #ffffff; /* Beyaz Renk */
+            text-align: center; /* Ortala */
+            margin-bottom: 15px; /* Alt Boşluk */
+        }
+        .urun-fiyat { /* İndirimli Fiyat */
+            font-size: 1.5rem; /* Yazı Boyutu */
+            font-weight: bold; /* Kalın Metin */
+            color: #4caf50; /* Beyaz Renk */
+            text-align: center; /* Ortala */
+        }
+        .urun-normal-fiyat { /* Eski Fiyat */
+            text-decoration: line-through; /* Üstü Çizili */
+            color: #ff0000; /* Kırmızı Renk */
+            margin-right: 10px; /* Sağ Boşluk */
+        }
+        .urun-aciklama { /* Ürün Açıklaması */
+            font-size: 1rem; /* Yazı Boyutu */
+            color: #d3d3d3; /* Beyaz Renk */
+            margin-top: 15px; /* Üst Boşluk */
+            text-align: justify; /* Hizalama */
+        }
+        .urun-beden-secimi { /* Beden Seçimi */
+            margin-top: 20px; /* Üst Boşluk */
+            text-align: center; /* Ortala */
+            color: #ffffff; /* Beyaz Renk */
+        }
+        .urun-beden-secimi select { /* Beden Select */
+            width: 50%; /* Genişlik */
+            padding: 10px; /* İç Boşluk */
+            border-radius: 5px; /* Köşe Yuvarlama */
+            border: none; /* Kenarlık Yok */
+            background-color: #1f1f2e; /* Arka Plan Rengi */
+            color: #ffffff; /* Beyaz Renk */
+        }
+        .stokta-yok { /* Stokta Yok */
+            display: block; /* Blokları */
+            width: 100%; /* Genişlik */
+            background-color: #ff0000; /* Arka Plan Rengi */
+            color: white; /* Beyaz Renk */
+            text-align: center; /* Ortala */
+            padding: 10px; /* İç Boşluk */
+            font-size: 1.2rem; /* Yazı Boyutu */
+            font-weight: bold; /* Kalın Yazı */
+            border: none; /* Kenarlık Yok */
+            border-radius: 5px; /* Köşe Yuvarlama */
+            margin-top: 20px; /* Üst Boşluk */
+            cursor: not-allowed; /* İmleç */
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.4); /* Gölge Efekti */
+        }
+        .footer-container { /* Footer Div */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border-radius: 20px 20px 0 0; /* Yuvarlama / Kavis */
+            box-shadow: 0px -6px 12px rgba(0, 0, 0, 0.4); /* Gölge */
+            margin-top: 25px; /* Üst Boşluk */
+            border: 2px solid #ff4500; /* Dış Çizgi */
+            padding: 10px; /* Dış Div Ve İç Boşluk */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover Efekti 0.3 Saniye */
+        }
+        .footer-container:hover { /* Footer Div Hover */
+            transform: scale(1.02); /* 1.02 Büyüme Efekti */
+            box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.5); /* Gölge Efekti */
+        }
+        .footer { /* Footer */
+            color: #ffffff; /* Beyaz Renk */
+            text-align: center; /* Metni Ortala */
+            padding: 15px 0; /* Üst Ve Alt Boşluk */
+            font-family: 'Arial', sans-serif; /* Yazı Tipi */
+        }
+        .footer p { /* Footer P */
+            margin: 0; /* Varsayılan Boşlukları Kaldır */
+            font-size: 1rem; /* Yazı Boyutu */
+            font-weight: bold; /* Yazı Kalınlığı */
+        }
+        .footer span { /* Footer Div */
+            color: #ff0000; /* Kırmızı Renk */
+            font-size: 2.0rem; /* Kalp Simgesi Boyutu */
+        }
+</style>
+<body>
+    <div class="kampanya-barı"> <!-- Kampanya Barı -->
+        <span>Yeni Sitemize Hoş Geldiniz! 31 Aralık 2024'e kadar Yeni Üyelerimize %40 İNDİRİM!</span>
+        <button class="kapat-butonu" onclick="document.querySelector('.kampanya-barı').style.display='none';">Kapat</button>
+    </div><!-- Kampanya Barı Bitişi -->
+
+    <header class="baslık"><!-- Başlık -->
+        <div class="menü-icon dropdown">
+            <button class="btn" id="menuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11z"/>
+                </svg>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="menuDropdown">
+                <li><a class="dropdown-item" href="./ürünler.html">Ürünler</a></li>
+                <li><a class="dropdown-item" href="./hakkımızda.html">Hakkımızda</a></li>
+                <li><a class="dropdown-item" href="./iletişim.html">İletişim</a></li>
+            </ul>
+        </div> <!-- Başlık Bitişi -->
+
+        <div class="logo"> <!-- Logo -->
+            <a href="anasayfa.html">
+                <img src="./anasayfa/logo.png" alt="CEPTESHOP Logo">
+            </a>
+        </div> <!-- Logo Bitişi -->
+
+        <div class="kullanıcı-iconu"> <!-- Kullanıcı İconu -->
+            <a href="hesap.html">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+                    <path fill-rule="evenodd" d="M8 9a6 6 0 0 0-5.978 5.217.5.5 0 0 0 .514.606h10.928a.5.5 0 0 0 .514-.606A6 6 0 0 0 8 9zm-4.481 5a5.001 5.001 0 0 1 8.962 0H3.519z"/>
+                </svg> <!-- Kullanıcı İconu Bitişi -->                 
+            </a>
+            <a href="sepet.html"> <!-- Sepet İconu -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 14H4a.5.5 0 0 1-.491-.408L1.01 1.607 1 1.5H.5zM3.14 6l1.311 7h8.385l1.311-7H3.14z"/>
+                    <path d="M5 16a2 2 0 1 1 4 0H5zm6 0a2 2 0 1 1 4 0h-4z"/>
+                </svg>
+            </a>
+        </div> <!-- Sepet İconu Bitişi -->
+    </header>
+
+    <div class="genis-container"> <!-- Genel Div -->
+        <div class="urun-detay"> <!-- Ürün Detayları -->
+            <img src="./ürünler/monitör.png" alt="Ultra HD Gaming Monitör">
+            <h1 class="urun-baslik">Ultra HD Gaming Monitör</h1>
+            <div class="text-center">
+                <span class="urun-normal-fiyat">₺2999.90</span>
+                <span class="urun-fiyat">₺1799.90</span>
+            </div>
+            <p class="urun-aciklama">
+                4K çözünürlükte üstün oyun deneyimi sunan geniş ekran, ultra düşük gecikme süresi ve HDR desteği ile profesyonel oyuncular için tasarlandı. Çift HDMI ve DisplayPort desteği ile çok yönlü kullanım imkanı sunar.
+            </p>
+            <div class="urun-beden-secimi">
+                <label for="beden">Beden Seçimi: </label>
+                <select id="beden" name="beden">
+                    <option>24 INC</option>
+                    <option>28 INC</option>
+                    <option>32 INC</option>
+                </select>
+            </div>
+            <button class="stokta-yok">Stokta Yok</button>
+        </div>
+    </div> <!-- Ürün Detayları Bitişi -->
+
+    <div class="footer-container"> <!-- Footer -->
+        <footer class="footer">
+            <p>
+                2024 CEPTESHOP - <span>&#10084;&#65039;</span> İle Yapıldı
+            </p>
+        </footer>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    body { /* Genel Sayfa */
+            background-color: #292c30; /* Arka Plan Rengi */
+            color: white; /* Beyaz Renk*/
+            margin: 0; /* Varsayılan Boşlukları Kaldır */
+            font-family: Arial, sans-serif; /* Yazı Tipi */
+            height: 100vh; /* Yüksek */
+        }
+        a{ /* Genel Yazı Alt Çizgisini Kaldırma */
+            text-decoration: none;
+        }
+        .kampanya-barı { /* Kampanya Barı */
+            background: linear-gradient(90deg, #e14502, #ffd000); /* Arka Plan Değişen Renk */
+            background-size: 200% 200%; /* Arka Plan Boyutu */
+            animation: gradyan-değişimi 6s ease infinite; /* Gradyan Değişimi 6 Saniye */
+            color: white; /* Renk */
+            padding: 10px 0; /* Margin Border Padding Content */
+            text-align: center; /* Metni Ortala */
+            font-size: 1.1rem; /* Font Boyutu */
+            font-weight: bold; /* Font Kalınlığı */
+            position: relative; /* Konuma göre göreceli kaydırma */
+            overflow: hidden; /* Fazlalığı Gizleme */
+        }
+        @keyframes gradyan-değişimi { /* Gradyan Değişimi (Sonradan Öğrendim) */
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .kampanya-barı span { /* Hareket Yeri */
+            display: inline-block; /* Satır içi Engelleme */
+            animation: kaydır 10s linear infinite; /* Kaydırma 10 Saniye */
+            white-space: nowrap; /* Kasıtlı bazı yerleri boş bırakması ve <br> etiketici görünceye kadar boşluk */
+        }
+        @keyframes kaydır {
+            0% { transform: translateX(160%); }
+            100% { transform: translateX(-160%); }
+        }
+        .kapat-butonu { /* Kapatma Butonu */
+            position: absolute; /* Tam istediğimiz yere yerleştirme */
+            right: 10px; /* Sağa 10px */
+            top: 50%; /* Tam Ortaya %50 */
+            transform: translateY(-50%); /* Yatay Olarak Hareket Ettirme */
+            background: rgba(0, 0, 0, 0.3); /* Arka PLan Rengi */
+            border: none; /* Dış Kısım Yok */
+            color: white; /* Renk */
+            padding: 5px 10px; /* İç Boşluk Eklendi / Kaldırıldı */
+            cursor: pointer; /* İmleç */
+        }
+        .baslık { /* Header */
+            display: flex; /* Esneklik Sağlar */
+            justify-content: space-between; /* Satır İçi Boşluk Dağıtma */
+            align-items: center; /* İtemleri Ortalama */ 
+            padding: 40px 20px; /* İç Boşluk Eklendi / Kaldırıldı */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border-bottom: 1px solid #ff0000; /* Alt Kenar Çizgisi */
+            max-height: 70px; /* Maksimum Uzunluk */
+        }
+        .baslık .menü-icon button svg,
+        .baslık .kullanıcı-iconu svg { /* Menü, Hesap, Sepet İconu */
+            fill: white; /* İkonlar Beyaz */
+            cursor: pointer; /* İmleç */
+            transition: fill 0.3s ease; /* Hover Sırasında Saniye */
+        }
+        .baslık .menü-icon button svg:hover,
+        .baslık .kullanıcı-iconu svg:hover {
+            fill: #e14502; /* Hover Sırasında Kırmızı */
+        }
+        .baslık .logo img {
+            height: 100px; /* Logo Genişliği */
+            max-height: 100px; /* Logo Maksimum Genişliği */
+            transition: transform 0.3s ease; /* Hover 0.3 Saniye */
+        }
+        .baslık .logo img:hover {
+            transform: scale(1.2); /* Hover Derecesi 1.2 */
+        }
+        .dropdown-menu { /* Menü */
+            min-width: 250px; /* Minimum genişlik */
+            max-width: 350px; /* Maksimum genişlik */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border: 1px solid #ff0000; /* Dış Rengi */
+            border-radius: 10px; /* Hafif Daha Yuvarlak */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Gölgelendirme */
+            padding: 10px 0; /* İç Boşluk Eklendi / Kaldırıldı */
+        }
+        .dropdown-item { /* Menü İtem */
+            color: white; /* Renk */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Arka Plan Hover İle 0.3 Saniye */
+            padding: 8px 20px; /* İç Boşluk Eklendi / Kaldırıldı */
+            white-space: nowrap; /* Metinlerin tek satırda kalması için */
+        }
+        .dropdown-item:hover { /* Menü İtem Hover */
+            background-color: #e14502; /* Arka Plan Rengi */
+            color: white; /* Renk */
+        }
+        .dropdown-divider { /* Menü Bölücü */
+            border-top: 1px solid #737373;  /* 1px Yukarı Gri Bölme */
+            margin: 5px 0; /* Ayırıcıya Boşluk Eklendi */
+        }
+        .baslık .kullanıcı-iconu svg { /* Kullanıcı İkonu Boyut */
+            width: 30px; /* Genişlik */
+            height: 30px; /* Uzunluk */
+        }
+        .kayit-wrapper {  /* Kayıt Ol */
+            display: flex; /* Ortalama */
+            justify-content: center; /* Yatayda Ortala */
+            align-items: center; /* Dikeyde Ortala */
+            height: 100%; /* Yükseklik */
+        }
+        .kayit-kutusu { /* Kayıt Kutusu */
+            text-align: center; /* Metni Ortala */
+            padding: 40px; /* İçerik Boşluğu */
+            border-radius: 15px; /* Yuvarlak Köşe */
+            background: linear-gradient(135deg, #3a3f44, #1e272e); /* Arka Plan Rengi*/
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Gölge Efekti */
+            width: 60%; /* Genişlik */
+            max-width: 500px; /* Maksimum Genişlik */
+        }
+        .kayit-kutusu h1 { /* Başlık */
+            font-size: 2.5rem; /* Başlık Boyutu */
+            margin-bottom: 20px; /* Alt Boşluk */
+            color: #ffeb3b; /* Sarı Renk */
+        }
+        .kayit-icon { /* Kayıt İconu */
+            font-size: 4rem; /* Font Boyutu */
+            color: #ffeb3b; /* Sarı Renk */
+            margin-bottom: 20px; /* Alt Boşluk */
+        }
+        .form-alani { /* Form Alanı Stili */
+            background-color: #3a3f44; /* Arka Plan Rengi */
+            color: rgb(255, 255, 255); /* Yazı Rengi */
+            border: none; /* Çerçeve Kaldır */
+            margin-bottom: 20px; /* Alt Boşluk */
+        }
+        .form-alani:focus {
+            outline: none; /* Çerçeve Kaldır */
+            background-color: #3a3f44; /* Arka Plan Rengi */
+            color: white; /* Beyaz Renk */
+            box-shadow: 0 0 5px #ffffff; /* Beyaz Odak Efekti */
+        }
+        .buton-kayit { /* Kayıt Butonu */
+            display: block; /* Tam Genişlik */
+            width: 100%; /* Genişlik */
+            padding: 10px; /* İçerik Boşluğu */
+            font-size: 1.2rem; /* Yazı Boyutu */
+            color: white; /* Beyaz Renk */
+            background-color: #4caf50; /* Arka Plan Rengi */
+            border: none; /* Çerçeve Kaldır */
+            border-radius: 30px; /* Yuvarlak Köşeler */
+            cursor: pointer; /* İmleç */
+            transition: all 0.3s ease; /* 0.3 Saniye Hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Gölge Efekti */
+        }
+        .buton-kayit:hover { /* Kayıt Butonu Hover */
+            background-color: #43a047; /* Arka Plan Rengi */
+            transform: scale(1.05); /* Büyüme Efekti */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5); /* Gölge Efekti */
+        }
+        .kayit-kutusu a { /* Alt Bağlantı */
+            color: #ffeb3b; /* Sarı Renk */
+            text-decoration: none; /* Alt Çizgi Kaldır */
+            font-size: 0.9rem; /* Yazı Boyutu */
+        }
+        .kayit-kutusu a:hover { /* Alt Bağlantı Hover */
+            text-decoration: underline; /* Alt Çizgi Ekle */
+        }
+        .footer-container { /* Footer Div */
+            background-color: #343a40; /* Arka Plan Rengi */
+            border-radius: 20px 20px 0 0; /* Yuvarlama / Kavis */
+            box-shadow: 0px -6px 12px rgba(0, 0, 0, 0.4); /* Gölge */
+            margin-top: 25px; /* Üst Boşluk */
+            border: 2px solid #ff4500; /* Dış Çizgi */
+            padding: 10px; /* Dış Div Ve İç Boşluk */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover Efekti 0.3 Saniye */
+        }
+        .footer-container:hover { /* Footer Div Hover */
+            transform: scale(1.02); /* 1.02 Büyüme Efekti */
+            box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.5); /* Gölge Efekti */
+        }
+        .footer { /* Footer */
+            color: #ffffff; /* Beyaz Renk */
+            text-align: center; /* Metni Ortala */
+            padding: 15px 0; /* Üst Ve Alt Boşluk */
+            font-family: 'Arial', sans-serif; /* Yazı Tipi */
+        }
+        .footer p { /* Footer P */
+            margin: 0; /* Varsayılan Boşlukları Kaldır */
+            font-size: 1rem; /* Yazı Boyutu */
+            font-weight: bold;
+        }
+        .footer span { /* Footer Div */
+            color: #ff0000; /* Kırmızı Renk */
+            font-size: 2.0rem; /* Kalp Simgesi Boyutu */
+        }
+</style>
+<body>
+    <div class="kampanya-barı"> <!-- Kampanya Barı -->
+        <span>Yeni Sitemize Hoş Geldiniz! 31 Aralık 2024'e kadar Yeni Üyelerimize %40 İNDİRİM!</span>
+        <button class="kapat-butonu" onclick="document.querySelector('.kampanya-barı').style.display='none';">Kapat</button>
+    </div><!-- Kampanya Barı Bitişi -->
+
+    <header class="baslık"><!-- Başlık -->
+        <div class="menü-icon dropdown">
+            <button class="btn" id="menuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11z"/>
+                </svg>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="menuDropdown">
+                <li><a class="dropdown-item" href="./ürünler.html">Ürünler</a></li>
+                <li><a class="dropdown-item" href="./hakkımızda.html">Hakkımızda</a></li>
+                <li><a class="dropdown-item" href="./iletişim.html">İletişim</a></li>
+            </ul>
+        </div> <!-- Başlık Bitişi -->
+
+        <div class="logo"> <!-- Logo -->
+            <a href="anasayfa.html">
+                <img src="./anasayfa/logo.png" alt="CEPTESHOP Logo">
+            </a>
+        </div> <!-- Logo Bitişi -->
+
+        <div class="kullanıcı-iconu"> <!-- Kullanıcı İconu -->
+            <a href="hesap.html">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+                    <path fill-rule="evenodd" d="M8 9a6 6 0 0 0-5.978 5.217.5.5 0 0 0 .514.606h10.928a.5.5 0 0 0 .514-.606A6 6 0 0 0 8 9zm-4.481 5a5.001 5.001 0 0 1 8.962 0H3.519z"/>
+                </svg> <!-- Kullanıcı İconu Bitişi -->                 
+            </a>
+            <a href="sepet.html"> <!-- Sepet İconu -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 14H4a.5.5 0 0 1-.491-.408L1.01 1.607 1 1.5H.5zM3.14 6l1.311 7h8.385l1.311-7H3.14z"/>
+                    <path d="M5 16a2 2 0 1 1 4 0H5zm6 0a2 2 0 1 1 4 0h-4z"/>
+                </svg>
+            </a>
+        </div> <!-- Sepet İconu Bitişi -->
+    </header>
+
+    <div class="kayit-wrapper"> <!-- Kayıt -->
+        <div class="kayit-kutusu">
+            <div class="kayit-icon">&#128400;</div>
+            <h1>Kayıt Olun</h1>
+            <form>
+                <div class="mb-3">
+                    <label for="adsoyad" class="form-label">Ad Soyad</label>
+                    <input type="text" class="form-control form-alani" id="adsoyad" placeholder="Adınızı ve soyadınızı girin">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-posta Adresi</label>
+                    <input type="email" class="form-control form-alani" id="email" placeholder="E-posta adresinizi girin">
+                </div>
+                <div class="mb-3">
+                    <label for="sifre" class="form-label">Şifre</label>
+                    <input type="password" class="form-control form-alani" id="sifre" placeholder="Şifrenizi belirleyin">
+                </div>
+                <button type="submit" class="btn buton-kayit">Kayıt Ol</button>
+            </form>
+            <p class="text-center mt-3">
+                Zaten hesabınız var mı? <a href="hesap.html">Giriş Yapın</a>
+            </p>
+        </div>
+    </div> <!-- Kayıt Bitişi -->
+
+    <div class="footer-container"> <!-- Footer -->
+        <footer class="footer">
+            <p>
+                2024 CEPTESHOP - <span>&#10084;&#65039;</span> İle Yapıldı
+            </p>
+        </footer>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</html>
